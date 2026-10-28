@@ -18,6 +18,11 @@
   <style>html,body{margin:0;background:#FFFBF5}@media (prefers-color-scheme:dark){html,body{background:#1F1B24}}</style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <script>
+  // Quita versiones antiguas guardadas por el navegador (para ver siempre lo último)
+  if ('serviceWorker' in navigator) { navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }); }
+  if (window.caches) { caches.keys().then(function (ks) { ks.forEach(function (k) { caches.delete(k); }); }); }
+</script>
+  <script src="flutter_bootstrap.js?v=1793186187" async></script>
 </body>
 </html>

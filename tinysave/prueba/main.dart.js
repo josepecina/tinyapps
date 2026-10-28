@@ -76857,7 +76857,7 @@ q=A.a25(!1,s,s,s,!0,s,s,s,!0,s,s,s,s,s,s,new A.aac(a),!1,s,s,s,s,A.bR("Borra los
 p=A.bR("Desbloquear todo \xb7 saltar de mundo \xb7 ver alta",s,s,A.bz(s,s,m,s,s,s,s,s,r,s,s,15,s,s,B.af,s,s,!0,s,s,s,s,s,s,s,s),s)
 B.b.C(n,A.c([o,q,A.a25(!1,s,s,s,!0,s,s,s,!0,s,s,s,s,s,s,s,!1,s,s,s,s,A.bR("Llegan con esas pantallas",s,s,A.bz(s,s,m,s,s,s,s,s,r,s,s,12.5,s,s,B.af,s,s,!0,s,s,s,s,s,s,s,s),s),s,p,s,s)],l))
 n.push(B.Sg)
-n.push(A.lv(A.bR("TinySave v0 prueba 28/10 11:06",s,s,A.bz(s,s,m,s,s,s,s,s,r,s,s,12,s,s,B.af,s,s,!0,s,s,s,s,s,s,s,s),s),s,s))
+n.push(A.lv(A.bR("TinySave v0 prueba 28/10 12:15",s,s,A.bz(s,s,m,s,s,s,s,s,r,s,s,12,s,s,B.af,s,s,!0,s,s,s,s,s,s,s,s),s),s,s))
 return A.aud(n,B.n6)},
 $S:178}
 A.aac.prototype={
