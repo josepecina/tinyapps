@@ -77,12 +77,19 @@ footer{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}footer
   <section class="card quit">
     <div class="row"><img class="ico" src="tinyquit.jpg" alt="TinyQuit"><div><p class="name">Tiny<b>Quit</b></p><p class="what">Fuma menos, a tu ritmo, con Tiny ☁️</p></div></div>
     <div class="btns" id="dl"></div>
-    <div class="btns" style="margin-top:14px"><a class="b3d" id="tester" href="https://play.google.com/apps/testing/com.tinyapps.tinyquit">🧪 Hazte tester</a></div>
+    <div class="btns" style="margin-top:14px"><a class="b3d" id="tester" href="https://groups.google.com/g/tinyapps-testers" target="_blank" rel="noopener">🧪 Hazte tester</a></div>
   </section>
   <section class="card save">
     <div class="row"><img class="ico" src="tinysave.jpg" alt="TinySave"><div><p class="name">Tiny<b>Save</b><span class="chip soon">MUY PRONTO</span></p><p class="what">Frena los caprichos y mira crecer tu dinero, con Savy 🐷</p></div></div>
-    <div class="btns"><a class="b3d gold" href="mailto:hellotinyapps@gmail.com?subject=Quiero%20probar%20TinySave%20antes%20que%20nadie&body=%C2%A1Hola!%20Quiero%20ser%20de%20los%20primeros%20en%20probar%20TinySave.%20Mi%20m%C3%B3vil%20es%3A%20">🔔 Apúntame para probarla</a></div>
+    <div class="btns"><a class="b3d gold" href="https://groups.google.com/g/tinyapps-testers" target="_blank" rel="noopener">🔔 Apúntame para probarla</a></div>
   </section>
+  <section class="card" id="tester-info"><p class="name" style="font-size:24px">🧪 Cómo ser tester</p>
+    <ol style="margin:10px 0 0;padding-left:22px;font-size:15.5px;line-height:1.5;color:#22324F">
+      <li>Pulsa <b>Hazte tester</b>: se abre el grupo de Google <b>tinyapps-testers</b>.</li>
+      <li>Pulsa el botón <b>«Unirse al grupo»</b> (arriba, es pequeñito). <b>Si no lo pulsas, no entras.</b></li>
+      <li>Usa la <b>misma cuenta de Gmail</b> que tienes en Google Play.</li>
+      <li>Te llegará un email con el enlace para probar TinyQuit, y otro cada vez que salga una app nueva para probarla antes que nadie 💌</li>
+    </ol></section>
   <section class="card"><div class="row"><div class="ico q">📚</div><div><p class="name" style="color:#B5C2D6">Tiny···</p><p class="what">¿Adivinas cuál viene? Una pista: 📚</p></div></div><div class="btns"><span class="b3d" style="color:#9AA8BF;cursor:default">🔒 Próximamente</span></div></section>
   <section class="card"><div class="row"><div class="ico q">⛰️</div><div><p class="name" style="color:#B5C2D6">Tiny···</p><p class="what">¿Adivinas cuál viene? Una pista: ⛰️</p></div></div><div class="btns"><span class="b3d" style="color:#9AA8BF;cursor:default">🔒 Próximamente</span></div></section>
   <section class="card"><div class="row"><div class="ico q">🌙</div><div><p class="name" style="color:#B5C2D6">Tiny···</p><p class="what">¿Adivinas cuál viene? Una pista: 🌙</p></div></div><div class="btns"><span class="b3d" style="color:#9AA8BF;cursor:default">🔒 Próximamente</span></div></section>
@@ -97,7 +104,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}footer
   var intent='intent://details?id='+pkg+'#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url='+encodeURIComponent(web)+';end';
   var dl=document.getElementById('dl');
   if(android){dl.innerHTML='<a class="b3d blue" href="'+intent+'">'+gp+'Descárgala gratis</a>';}
-  else if(ios){dl.innerHTML='<a class="b3d blue" href="#" onclick="document.getElementById(\'n\').hidden=false;return false">'+ap+'iPhone · muy pronto</a>';var t=document.getElementById('tester');t.href='mailto:hellotinyapps@gmail.com?subject=Av%C3%ADsame%20cuando%20salga%20TinyQuit%20en%20iPhone';t.textContent='🔔 Avísame cuando salga';}
+  else if(ios){dl.innerHTML='<a class="b3d blue" href="#" onclick="document.getElementById(\'n\').hidden=false;return false">'+ap+'iPhone · muy pronto</a>';var t=document.getElementById('tester');t.textContent='🔔 Avísame cuando salga';}
   else{dl.className='btns two';dl.innerHTML='<a class="b3d blue" href="'+web+'">'+gp+'Android</a><a class="b3d" href="#" onclick="document.getElementById(\'n\').hidden=false;return false">'+ap+'iPhone</a>';}
   dl.insertAdjacentHTML('afterend','<p class="note" id="n" '+(ios?'':'hidden')+'>En iPhone llega muy pronto 💙 Síguenos para enterarte el primero.</p>');
 })();
