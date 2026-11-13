@@ -109440,7 +109440,7 @@ $S:20}
 A.aPl.prototype={
 $2(a,b){var s,r,q=null,p=this.a,o=A.h(a).ax.a===B.f
 $.k=o
-s=A.q("Muebles de "+p.d.b,q,q,q,q,A.l(q,q,o?B.w:B.q,q,q,q,q,q,"Fredoka",q,q,21,q,q,B.r,q,q,!0,q,q,q,q,q,q,q,q),q,q)
+s=A.q("Muebles \xb7 "+p.d.b,q,q,q,q,A.l(q,q,o?B.w:B.q,q,q,q,q,q,"Fredoka",q,q,21,q,q,B.r,q,q,!0,q,q,q,q,q,q,q,q),q,q)
 o=A.h(a).ax.a===B.f
 $.k=o
 s=A.a([s,B.bb,A.q("Cada casa trae sus huecos y sus muebles. Toca uno para ponerlo. Al desbloquear casas nuevas, sus muebles se pueden usar aqu\xed si el hueco existe.",q,q,q,q,A.l(q,q,o?B.p:B.o,q,q,q,q,q,"Nunito",q,q,12.5,q,q,B.H,q,q,!0,q,q,q,q,q,q,q,q),q,q),B.a9],t.p)
@@ -109463,7 +109463,7 @@ l=t.p
 o=A.a([p,B.a7,A.q(o,a1,a1,a1,a1,A.l(a1,a1,m?B.w:B.q,a1,a1,a1,a1,a1,a2,a1,a1,14.5,a1,a1,B.P,a1,a1,!0,a1,a1,a1,a1,a1,a1,a1,a1),a1,a1),B.dX],l)
 p=q==null
 if(p){if(a3==="armario")m="Con el bot\xf3n Armario"
-else m=a3==="ventana"?"Parte de la casa":"No cabe en "+r.b
+else m=a3==="ventana"?"Parte de la casa":"No cabe en esta casa"
 k=A.h(n).ax.a===B.f
 $.k=k
 o.push(A.q(m,a1,a1,a1,a1,A.l(a1,a1,k?B.p:B.o,a1,a1,a1,a1,a1,a2,a1,a1,11.5,a1,a1,B.A,a1,a1,!0,a1,a1,a1,a1,a1,a1,a1,a1),a1,a1))}if(p&&a3!=="armario"&&a3!=="ventana")o.push(B.a9E)
@@ -112009,7 +112009,7 @@ aw9(a){var s,r=new A.ab(Date.now(),0,!1),q=new A.aXt()
 A:{if(0===a){s=B.a04[A.hI(r)-1]+" "+A.i(q.$1(A.ak(r)))+"/"+A.i(q.$1(A.ad(r)))+"/"+A.i(q.$1(B.l.ai(A.al(r),100)))
 break A}if(1===a){s="Tu dinero"
 break A}if(2===a){s="Con los tuyos"
-break A}if(4===a){s="La buhardilla de Savy"
+break A}if(4===a){s="El fuerte de mantas de Savy"
 break A}s="Muy pronto"
 break A}return s},
 k6(a){A.a_("tick")
@@ -118754,7 +118754,7 @@ b=A.a([i,h,g,c,q.$3("Apariencia",B.V,A.a([new A.ao(B.dP,A.a6(A.a([f,B.aO,A.Y(A.a
 b.push(q.$3("Tester",B.q,A.a([p.$5$col$ic$onTap$sub("Panel de pruebas",B.q,b0,new A.aXa(b3),"Animaciones, pantallas de inicio, amigos, empezar de cero\u2026")],d)))
 b.push(B.Io)
 i=b1.R8?" \xb7 probador":""
-b.push(A.bg(A.aj(a5,A.q("TinySave v0 prueba 13/11 18:33"+i,a5,a5,a5,a5,A.l(a5,a5,r,a5,a5,a5,a5,a5,a6,a5,a5,12,a5,a5,B.A,a5,a5,!0,a5,a5,a5,a5,a5,a5,a5,a5),a5,a5),B.t,!1,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,new A.aXb(this.a,b3,b1),a5,a5,a5,a5,a5,a5),a5,a5))
+b.push(A.bg(A.aj(a5,A.q("TinySave v0 prueba 13/11 18:37"+i,a5,a5,a5,a5,A.l(a5,a5,r,a5,a5,a5,a5,a5,a6,a5,a5,12,a5,a5,B.A,a5,a5,!0,a5,a5,a5,a5,a5,a5,a5,a5),a5,a5),B.t,!1,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,new A.aXb(this.a,b3,b1),a5,a5,a5,a5,a5,a5),a5,a5))
 return A.nv(j,b2,A.bK(B.a5,A.a([B.acm,A.co(a5,b,a5,B.v9,a5,B.ai,!1)],d),B.M,B.T,a5),a5,!1,!1)},
 $S:138}
 A.aXn.prototype={
@@ -119209,7 +119209,7 @@ if(n===0)return A.a_("tick")
 s=p.b
 r=B.c.aW(s.a.a)
 q=A.au(p.c,!1)
-$.dA().zo(""+n+"/5 \xb7 "+r,"v0 prueba 13/11 18:33").bI(new A.b6s(o,p.d,s),t.P)
+$.dA().zo(""+n+"/5 \xb7 "+r,"v0 prueba 13/11 18:37").bI(new A.b6s(o,p.d,s),t.P)
 A.be("pick3")
 q.dt()},
 $S:0}
@@ -137995,7 +137995,7 @@ r($,"byB","ab7",()=>{var q=new A.VB()
 q.qu($.bfS())
 return q})
 s($,"bNk","tV",()=>new A.b7D().$0())
-s($,"bNu","bs2",()=>new A.adm(1,"el fuerte de mantas","assets/casa/w1",B.a64,290,112,92,500,700,B.a7Z,B.a8j,B.a7H,B.a7L,B.a3W))
+s($,"bNu","bs2",()=>new A.adm(1,"El fuerte de mantas","assets/casa/w1",B.a64,290,112,92,500,700,B.a7Z,B.a8j,B.a7H,B.a7L,B.a3W))
 s($,"bK_","bpV",()=>{var q=null,p=A.ma(q,q,q,q,B.als,B.as,B.aD,q,B.e2,B.bH)
 p.py()
 return p})
