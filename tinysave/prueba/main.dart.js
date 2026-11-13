@@ -118754,7 +118754,7 @@ b=A.a([i,h,g,c,q.$3("Apariencia",B.V,A.a([new A.ao(B.dP,A.a6(A.a([f,B.aO,A.Y(A.a
 b.push(q.$3("Tester",B.q,A.a([p.$5$col$ic$onTap$sub("Panel de pruebas",B.q,b0,new A.aXa(b3),"Animaciones, pantallas de inicio, amigos, empezar de cero\u2026")],d)))
 b.push(B.Io)
 i=b1.R8?" \xb7 probador":""
-b.push(A.bg(A.aj(a5,A.q("TinySave v0 prueba 13/11 18:37"+i,a5,a5,a5,a5,A.l(a5,a5,r,a5,a5,a5,a5,a5,a6,a5,a5,12,a5,a5,B.A,a5,a5,!0,a5,a5,a5,a5,a5,a5,a5,a5),a5,a5),B.t,!1,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,new A.aXb(this.a,b3,b1),a5,a5,a5,a5,a5,a5),a5,a5))
+b.push(A.bg(A.aj(a5,A.q("TinySave v0 prueba 13/11 18:48"+i,a5,a5,a5,a5,A.l(a5,a5,r,a5,a5,a5,a5,a5,a6,a5,a5,12,a5,a5,B.A,a5,a5,!0,a5,a5,a5,a5,a5,a5,a5,a5),a5,a5),B.t,!1,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,a5,new A.aXb(this.a,b3,b1),a5,a5,a5,a5,a5,a5),a5,a5))
 return A.nv(j,b2,A.bK(B.a5,A.a([B.acm,A.co(a5,b,a5,B.v9,a5,B.ai,!1)],d),B.M,B.T,a5),a5,!1,!1)},
 $S:138}
 A.aXn.prototype={
@@ -119209,7 +119209,7 @@ if(n===0)return A.a_("tick")
 s=p.b
 r=B.c.aW(s.a.a)
 q=A.au(p.c,!1)
-$.dA().zo(""+n+"/5 \xb7 "+r,"v0 prueba 13/11 18:37").bI(new A.b6s(o,p.d,s),t.P)
+$.dA().zo(""+n+"/5 \xb7 "+r,"v0 prueba 13/11 18:48").bI(new A.b6s(o,p.d,s),t.P)
 A.be("pick3")
 q.dt()},
 $S:0}
