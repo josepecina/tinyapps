@@ -4,7 +4,7 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#FFFBF5",
-  "theme_color": "#E25B4F",
+  "theme_color": "#FFD3DF",
   "description": "Web app de prueba de TinySave (solo para Jose).",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
