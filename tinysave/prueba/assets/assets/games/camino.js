@@ -688,8 +688,8 @@ function frame2(now){{const W1=boxW(),H1=boxH();if(W1>20&&H1>20&&(W1!==vw||H1!==
  FXL.forEach(it=>{if(it.bb[2]>v[0]-60&&it.bb[0]<v[2]+60&&it.bb[3]>v[1]-60&&it.bb[1]<v[3]+60){g.save();try{it.fx(it.x,it.y,it.s||1,t,it.i||0);}catch(e){}g.restore();}});
  skyDraw(t,v);
  PRZ.forEach(p=>{if(p.x<v[0]-40||p.x>v[2]+40||p.y<v[1]-50||p.y>v[3]+50)return;const c=stSpr(p);const pop=p===SEL?1.12:1;g.save();g.translate(p.x,p.y-5);g.scale(pop,pop);g.drawImage(c,-35,-35,70,70);g.restore();});
- const tq=tinyPos();if(!tinyC){tinyC=document.createElement('canvas');tinyC.width=Math.ceil(90*BS);tinyC.height=Math.ceil(90*BS);g=tinyC.getContext('2d');g.scale(BS,BS);tiny(45,60,62);g.fillStyle=INK;rr(23,68,44,20,10);g.fill();txt(T_('hoy','Hoy'),45,78,11.5,'#fff',900,'center','N');g.beginPath();g.moveTo(40,68);g.lineTo(50,68);g.lineTo(45,63);g.fill();g=ctx;}
- ctx.drawImage(tinyC,tq[0]-45,tq[1]-54+Math.sin(t*2.2)*1.5,90,90);
+ const tq=tinyPos();if(!tinyC){tinyC=document.createElement('canvas');tinyC.width=Math.ceil(90*BS);tinyC.height=Math.ceil(90*BS);g=tinyC.getContext('2d');g.scale(BS,BS);tiny(45,60,62);if(!window.SAVY_K){g.fillStyle=INK;rr(23,68,44,20,10);g.fill();txt(T_('hoy','Hoy'),45,78,11.5,'#fff',900,'center','N');g.beginPath();g.moveTo(40,68);g.lineTo(50,68);g.lineTo(45,63);g.fill();}g=ctx;}
+ {const K=window.SAVY_K||1;ctx.drawImage(tinyC,tq[0]-45*K,tq[1]-60*K+Math.sin(t*2.2)*1.5,90*K,90*K);}
  if(SEL)placeBubble();
 
  if(idleK<12){idleK++;}else{idleK=0;prebake();}}

@@ -7,11 +7,11 @@
 // La app pasa con CAM_INIT/BAR_UPDATE: {today, prizes:[{id,n,d,done,cur,gold,lock}], lv:[nombres], col:[colores], savy:dataURL}
 // Reglas comprobadas por `_comun/qa/qa_barrio.py` leyendo BSPEC (abajo): nada de otro barrio, nada de exterior en un interior,
 // escala real entre objetos, voladores orientados, suelo y camino propios, 45 barrios en el mapa.
-const BSPEC=[{barrio:1,nombre:'Fuerte de mantas',interior:true,suelo:'tarima',camino:'alfombra larga',
+const BSPEC=[{barrio:1,nombre:'Fuerte de mantas',interior:true,camara:'mini',suelo:'tarima',camino:'alfombra de pasillo amarilla',suelo_futuro:'césped estándar',niebla:'continua',
  unicos:['cojín','osito','planta en lata','libros','bloques','castillo de almohadas','lámpara de pie','cesta de ovillos'],voladores:['avión de papel','bola de papel'],
  comunes:['alfombra','zapatilla','pelota','peonza','cubo de juguete'],
- // alto real (cm) y alto dibujado (px) de cada cosa: la proporción px/cm tiene que ser parecida en todas (escala real)
- escala:{'alfombra':[200,170],'cojín':[45,38],'osito':[30,30],'planta en lata':[40,40],'libros':[22,20],'bloques':[20,22],'castillo de almohadas':[70,60],'lámpara de pie':[150,120],'cesta de ovillos':[30,26],'Savy':[22,24]}}];
+ // alto real (cm) y alto dibujado (px) de cada cosa (mini mundo ×2,2; Savy ×1,5): la proporción px/cm parecida en todas
+ escala:{'alfombra':[200,374],'cojín':[45,84],'osito':[30,66],'planta en lata':[40,88],'libros':[22,44],'bloques':[20,48],'castillo de almohadas':[70,132],'lámpara de pie':[150,250],'cesta de ovillos':[30,57],'Savy':[22,36]}}];
 const QC=['#F7B6C3','#FFD98A','#9FDCC4','#A9CBF4','#FFE9CC','#C9B3EE','#FF9C86'];
 // ---------------- objetos del fuerte de mantas (por código: nítidos con cualquier zoom) ----------------
 const F={
@@ -65,22 +65,22 @@ function genLevel(L){const T=LVd[L],d0=30*L,d1=d0+30;seed=1000+L*7919;const rect
  const place=(spec,i)=>{const r=spec.r;spec._p=spec._p||[];for(let t=0;t<300;t++){const x=R(rect[0]+r*.6,rect[2]-r*.6),y=R(rect[1]+r*.5,rect[3]-r*.3);if(spec.sep&&spec._p.some(q=>Math.hypot(q[0]-x,(q[1]-y)*1.4)<spec.sep))continue;
   if(free(x,y,r)){if(!spec.under)take(x,y,r);spec._p.push([x,y]);const s=spec.sc?R(spec.sc[0],spec.sc[1]):1;add({x,y,r,s,f:flip(),i,a:spec.a,b:spec.b,fn:spec.f,bw:spec.bw,bh:spec.bh,z:spec.z||0});return;}}};
  (T.items||[]).forEach(spec=>{spec._p=[];for(let i=0;i<spec.n;i++)place(spec,i);});
- ((T.sky||{}).fly||[]).forEach(([k,n])=>{for(let i=0;i<n;i++)SKY.push({lo:-90,len:W+180,k,x:R(0,W),y:R(rect[1]+40,rect[3]-40),v:R(14,24)*(rnd()<.5?-1:1),s:R(.9,1.1),p:0,ph:R(0,6),pk:.16+rnd()*.22});});}
+ ((T.sky||{}).fly||[]).forEach(([k,n])=>{for(let i=0;i<n;i++)SKY.push({lo:-90,len:W+180,k,x:R(0,W),y:R(rect[1]+40,rect[3]-40),v:R(14,24)*(rnd()<.5?-1:1),s:R(.9,1.1)*(T.fk||1),p:0,ph:R(0,6),pk:.16+rnd()*.22});});}
 function milAt(){}
-const BLEVELS=[{n:'Fuerte de mantas',c:'#F0727F',gr:['#E2B57E','#E2B57E'],fc:['#E9C08A','#E2B57E','#DDAF76','#E6BC86'],rc:{edge:'#D98A9E',base:'#F7B6C3',stripe:'#FFF1DF',dot:'#E86F8F'},
+const BLEVELS=[{n:'Fuerte de mantas',c:'#F0727F',gr:['#E2B57E','#E2B57E'],fc:['#E9C08A','#E2B57E','#DDAF76','#E6BC86'],rc:{edge:'#E2B25A',base:'#FFD98A',stripe:'#FFF4D6',dot:'#E8A33D'},
  sky:{fly:[['pplane',2],['pball',1]]},
- items:[I((x,y,s,f,i)=>F.rug(x,y,s,QC[(i*3)%7]),3,70,{b:1,z:-1,under:1,sep:190,sc:[1.1,1.5]}),
-  I((x,y,s,f,i)=>F.cushion(x,y,s,QC[(i+2)%7]),5,20,{sep:70,sc:[.95,1.1]}),I((x,y,s,f)=>F.teddy(x,y,s,f),2,15,{sep:150}),I((x,y,s)=>F.plantTin(x,y,s),5,13,{sc:[.9,1.1],sep:60}),
-  I((x,y,s)=>F.books(x,y,s),3,13),I((x,y,s)=>F.blocks(x,y,s),3,13),I((x,y,s)=>F.castle(x,y,s),1,28),I((x,y,s)=>F.lamp(x,y,s),2,12,{bh:110,sep:200}),I((x,y,s)=>F.yarn(x,y,s),2,14),
-  I((x,y,s,f,i)=>F.slipper(x,y,s,QC[i%7]),4,8),I((x,y,s,f,i)=>F.toy(x,y,s,i%3,QC[(i+4)%7]),8,8)]}];
+ fk:1.8,items:[I((x,y,s,f,i)=>F.rug(x,y,s,QC[(i*3)%7],i),4,40,{b:1,z:-1,under:1,sep:280,sc:[2.4,3.0]}),
+  I((x,y,s,f,i)=>F.cushion(x,y,s,QC[(i+2)%7]),3,40,{sep:160,sc:[2.1,2.4]}),I((x,y,s,f)=>F.teddy(x,y,s,f),2,34,{sep:260,sc:[2.1,2.3]}),I((x,y,s)=>F.plantTin(x,y,s),2,30,{sc:[2.2,2.5],sep:220}),
+  I((x,y,s)=>F.books(x,y,s),2,30,{sc:[2.1,2.3]}),I((x,y,s)=>F.blocks(x,y,s),2,30,{sc:[2.1,2.3]}),I((x,y,s)=>F.castle(x,y,s),1,60,{sc:[2,2.2]}),I((x,y,s)=>F.lamp(x,y,s),1,26,{bh:240,sep:300,sc:[2,2.1]}),I((x,y,s)=>F.yarn(x,y,s),2,30,{sc:[2.1,2.3]}),
+  I((x,y,s,f,i)=>F.slipper(x,y,s,QC[i%7]),3,18,{sc:[2.1,2.3]}),I((x,y,s,f,i)=>F.toy(x,y,s,i%3,QC[(i+4)%7]),5,18,{sc:[2,2.3]})]}];
 // ---------------- voladores: avión de papel (mira hacia donde vuela, sin estela) y bola de papel ----------------
 function paperPlane(x,y,s,dir,t){g.save();g.translate(x,y);g.scale(dir*s,s);g.rotate(Math.sin(t*1.6)*.06);
- g.fillStyle='rgba(60,40,20,.12)';g.beginPath();g.ellipse(-4,58,16,4,0,0,7);g.fill(); // sombra en el suelo
+ _feather(-4,58,16,4,.12); // sombra en el suelo, difuminada
  g.fillStyle='#FFFFFF';g.beginPath();g.moveTo(18,0);g.lineTo(-16,-9);g.lineTo(-10,0);g.closePath();g.fill();
  g.fillStyle='#DCEBFA';g.beginPath();g.moveTo(18,0);g.lineTo(-10,0);g.lineTo(-16,8);g.closePath();g.fill();
  g.fillStyle='#BFD7F2';g.beginPath();g.moveTo(18,0);g.lineTo(-10,0);g.lineTo(-7,3);g.closePath();g.fill();
  g.strokeStyle='rgba(120,150,190,.6)';g.lineWidth=.8;g.beginPath();g.moveTo(18,0);g.lineTo(-10,0);g.stroke();g.restore();}
-function paperBall(x,y,s,t){g.save();g.translate(x,y);g.fillStyle='rgba(60,40,20,.1)';g.beginPath();g.ellipse(2,50,9,2.6,0,0,7);g.fill();g.rotate(t*.4);ball3d(0,0,8*s,'#FFF6E8');g.strokeStyle='rgba(200,170,130,.6)';g.lineWidth=.9;for(let i=0;i<4;i++){g.beginPath();g.arc(0,0,8*s,i*1.6,i*1.6+1);g.stroke();}g.restore();}
+function paperBall(x,y,s,t){g.save();g.translate(x,y);_feather(2,50,9,2.6,.1);g.rotate(t*.4);ball3d(0,0,8*s,'#FFF6E8');g.strokeStyle='rgba(200,170,130,.6)';g.lineWidth=.9;for(let i=0;i<4;i++){g.beginPath();g.arc(0,0,8*s,i*1.6,i*1.6+1);g.stroke();}g.restore();}
 const _sky0=skyDraw;
 skyDraw=function(t,v){SKY.forEach(o=>{if(o.k!=='pplane'&&o.k!=='pball')return;let x=o.lo+((o.x-o.lo+o.v*t*(o.k==='pball'?.35:1))%o.len+o.len)%o.len,y=o.y;x+=(x-cx)*o.pk;y+=(y-cy)*o.pk;if(x<v[0]-60||x>v[2]+60||y<v[1]-80||y>v[3]+80)return;
  if(o.k==='pplane')paperPlane(x,y+Math.sin(t*1.3+o.ph)*5,o.s,o.v>0?1:-1,t+o.ph);else paperBall(x,y+Math.sin(t*.8+o.ph)*7,o.s,t+o.ph);});};
@@ -110,13 +110,79 @@ function signAt(x,y,L){const T=LVd[L],c=(CFG.col&&CFG.col[L])||T.c,nm=(CFG.lv&&C
  g.restore();}
 function buildPrz(){return [{id:'home',home:1,d:.6,k:'home'},...(CFG.prizes||[...Array(10)].map((_,i)=>({id:i,n:i+1,d:3*i+3,done:i<2,cur:i===2})))].map(p=>Object.assign({k:'num'},p));}
 function loadSavy(){if(!CFG.savy)return;SAVY_IMG=new Image();SAVY_IMG.onload=()=>{tinyC=null;};SAVY_IMG.src=CFG.savy;}
-function boot2(){TRX=CFG.tr||{};TODAY=CFG.today??1;span=14;MODE='big';const N=Math.max(1,(CFG.lv||[]).length);
+function boot2(){RW=84;window.SAVY_K=1.5;TRX=CFG.tr||{};TODAY=CFG.today??1;span=14;MODE='big';const N=Math.max(1,(CFG.lv||[]).length);
  LVd=[BLEVELS[0],...[...Array(N-1)].map((_,i)=>({n:CFG.lv[i+1],c:(CFG.col||[])[i+1]||'#B9B2A8',locked:1,gr:['#F6EFE8','#F6EFE8'],rc:{edge:'#E6DCD2',base:'#F4EEE8',stripe:'#FBF8F4',dot:'#E6DCD2'}}))];
  BRIDGES=[];PRZ=buildPrz();loadSavy();genAll();fixSigns();layoutPrizes();document.getElementById('hoy').textContent='Savy';bodyBg();resize();centerToday();addEventListener('resize',()=>{if(boxW()>20&&boxH()>20)fixSize();});requestAnimationFrame(frame);}
 // la app actualiza sin recargar (objetivo hecho, ropa nueva…): nada de pantalla de carga al volver a Barrios
 window.BAR_UPDATE=o=>{if(!booted)return;Object.assign(CFG,o||{});TODAY=CFG.today??TODAY;PRZ=buildPrz();layoutPrizes();STC.clear();if(o&&o.savy)loadSavy();tinyC=null;};
 // si ya había arrancado (con datos de ejemplo o viejos), se reconstruye con los de la app (nunca se queda con 1 solo barrio)
-function barRebuild(){const N=Math.max(1,(CFG.lv||[]).length);LVd=[BLEVELS[0],...[...Array(N-1)].map((_,i)=>({n:CFG.lv[i+1],c:(CFG.col||[])[i+1]||'#B9B2A8',locked:1,gr:['#F6EFE8','#F6EFE8'],rc:{edge:'#E6DCD2',base:'#F4EEE8',stripe:'#FBF8F4',dot:'#E6DCD2'}}))];
+function barRebuild(){RW=84;window.SAVY_K=1.5;const N=Math.max(1,(CFG.lv||[]).length);LVd=[BLEVELS[0],...[...Array(N-1)].map((_,i)=>({n:CFG.lv[i+1],c:(CFG.col||[])[i+1]||'#B9B2A8',locked:1,gr:['#F6EFE8','#F6EFE8'],rc:{edge:'#E6DCD2',base:'#F4EEE8',stripe:'#FBF8F4',dot:'#E6DCD2'}}))];
  TODAY=CFG.today??TODAY;PRZ=buildPrz();loadSavy();genAll();fixSigns();layoutPrizes();TILES.clear();SPC.clear();STC.clear();tinyC=null;centerToday();}
 window.CAM_INIT=o=>{if(booted){CFG=Object.assign({},o||{});barRebuild();send('ready');return;}CFG=Object.assign({},o||{});go();};
 function fixSigns(){SIGNS.forEach(q=>{q[0]=Math.max(84,Math.min(W-84,q[0]));});} // el cartel entero dentro de la pantalla
+// ======================= r33 (Jose, 24 nov noche) — reglas nuevas de Barrios =======================
+// · ESCALA POR CÁMARA: cada barrio decide dónde está la cámara. Casa por dentro (fuerte) = MINI MUNDO: todo muy grande
+//   (alfombras enormes que llenan, pocas plantas pero grandes); parque = media; Nueva York, islas = muy lejos.
+// · Camino algo más ancho y de otro color que Savy (rosa sobre rosa no se ve): aquí, alfombra de pasillo amarilla.
+// · Futuros barrios: niebla CONTINUA (sin cortes entre barrios) sobre un césped estándar (verde con matitas), no madera.
+// · Nubes fundidas: ningún círculo se ve suelto; cada bulto con su sombrita abajo-derecha y brillo arriba-izquierda.
+// · Sombras: la luz viene SIEMPRE de arriba a la izquierda → la sombra nace en la base y se va a la derecha, muy difuminada
+//   (nada de óvalos duros debajo, que hacen flotar: cubos, zapatillas).
+// · Planta: lata → tierra → hojas que salen de la tierra → borde de delante (las hojas nunca detrás de la lata).
+// · Cartel: más alto; «BARRIO n» en una etiqueta pequeña y el nombre GRANDE (2 líneas si hace falta, cabe el alemán);
+//   el círculo del icono del color claro del barrio (no blanco).
+// · Paradas: del color del barrio, sin sombras; ✓ las hechas; dorada si va con comodín Premium; la de hoy la ocupa Savy
+//   (al tocar a Savy se abre). Sin «Tú» debajo de Savy. Sin botones + y −; el de Savy arriba a la derecha, con el color del
+//   barrio cuando estás sobre Savy y blanco si no.
+const ZONA={1:{camara:'mini',k:2.2}};
+function _hexL(c,k){const A=hx(c);return '#'+A.map(v=>Math.round(v+(255-v)*k).toString(16).padStart(2,'0')).join('');} // aclarar devolviendo HEX (sh() devuelve rgb() y no se puede encadenar) // barrio → cámara (mini mundo / media / lejos / muy lejos) y escala de sus objetos
+function _feather(x,y,rx,ry,a){g.save();g.filter='blur('+Math.max(2,ry*.9).toFixed(1)+'px)';g.fillStyle='rgba(60,40,20,'+(a??.22)+')';g.beginPath();g.ellipse(x,y,rx,ry,0,0,7);g.fill();g.restore();}
+// sombra de contacto: nace en la base y se estira hacia la derecha (luz de arriba-izquierda)
+shadowG=function(x,y,rx,ry,a){_feather(x+rx*.45,y-ry*.15,rx*1.05,ry*.95,(a??.24)*.9);};
+// nube fundida: un solo contorno (unión de bultos) y dentro, sombra abajo-derecha y brillo arriba-izquierda por bulto
+cloudPuff=function(x,y,s,a){const B=[[-16,4,11],[-4,-4,15],[12,0,12],[22,6,8],[2,8,10]];g.save();g.globalAlpha=a??1;const P=new Path2D();B.forEach(([dx,dy,r])=>{P.moveTo(x+(dx+r)*s,y+dy*s);P.arc(x+dx*s,y+dy*s,r*s,0,7);});
+ g.fillStyle='#FFFFFF';g.fill(P);g.save();g.clip(P);B.forEach(([dx,dy,r])=>{const cx0=x+dx*s,cy0=y+dy*s;g.fillStyle=rad(cx0+r*s*.35,cy0+r*s*.55,r*s*.2,r*s*1.1,[[0,'rgba(170,196,226,.55)'],[1,'rgba(170,196,226,0)']]);g.beginPath();g.arc(cx0+r*s*.3,cy0+r*s*.5,r*s*1.1,0,7);g.fill();
+  g.fillStyle=rad(cx0-r*s*.35,cy0-r*s*.4,0,r*s*.7,[[0,'rgba(255,255,255,.9)'],[1,'rgba(255,255,255,0)']]);g.beginPath();g.arc(cx0-r*s*.35,cy0-r*s*.4,r*s*.7,0,7);g.fill();});g.restore();g.restore();};
+// alfombras: 3 formas (ovalada trenzada, rectangular con flecos, redonda de retales) y colores variados
+F.rug=(x,y,s,c,i)=>{const k=(i||0)%3,rx=60*s,ry=20*s;_feather(x+rx*.12,y+ry*.25,rx*1.02,ry*1.05,.14);
+ if(k===0){for(let j=0;j<7;j++){const q=1-j/7;g.fillStyle=j%2?sh(c,-.08):sh(c,.1);g.beginPath();g.ellipse(x,y,rx*q,ry*q,0,0,7);g.fill();}g.strokeStyle='rgba(255,255,255,.4)';g.lineWidth=1.2;g.setLineDash([3,3]);g.beginPath();g.ellipse(x,y,rx*.93,ry*.9,0,0,7);g.stroke();g.setLineDash([]);}
+ else if(k===1){const w=rx*1.7,h=ry*1.7;g.fillStyle=sh(c,.05);g.beginPath();g.moveTo(x-w/2+8*s,y-h/2);g.lineTo(x+w/2-8*s,y-h/2);g.lineTo(x+w/2,y+h/2);g.lineTo(x-w/2,y+h/2);g.closePath();g.fill();
+  g.save();g.clip();for(let j=0;j<6;j++){g.fillStyle=j%2?'rgba(255,255,255,.35)':'rgba(0,0,0,.05)';g.fillRect(x-w/2,y-h/2+j*h/6,w,h/12);}g.restore();g.strokeStyle='#FFF4DE';g.lineWidth=1.4*s;for(let yy=y-h/2+3;yy<y+h/2;yy+=4*s){const q=(yy-(y-h/2))/h;g.beginPath();g.moveTo(x-w/2+8*s*(1-q),yy);g.lineTo(x-w/2+8*s*(1-q)-6*s,yy);g.moveTo(x+w/2-8*s*(1-q),yy);g.lineTo(x+w/2-8*s*(1-q)+6*s,yy);g.stroke();}}
+ else{const r0=ry*1.35;QC.forEach((q,j)=>{g.fillStyle=q;g.beginPath();g.moveTo(x,y);g.ellipse(x,y,r0*2.1,r0,0,j/QC.length*6.283,(j+1)/QC.length*6.283);g.closePath();g.fill();});g.fillStyle='rgba(255,255,255,.85)';g.beginPath();g.ellipse(x,y,r0*.5,r0*.24,0,0,7);g.fill();g.strokeStyle='rgba(255,255,255,.55)';g.setLineDash([3,3]);g.beginPath();g.ellipse(x,y,r0*2.0,r0*.94,0,0,7);g.stroke();g.setLineDash([]);}};
+F.plantTin=(x,y,s)=>{shadowG(x,y,10*s,3*s,.26);
+ g.fillStyle=cyl(x-7*s,x+7*s,'#C9D3DD');g.fillRect(x-7*s,y-14*s,14*s,14*s);g.fillStyle=cyl(x-7*s,x+7*s,'#E8505B');g.fillRect(x-7*s,y-10*s,14*s,6*s);
+ g.fillStyle='#EEF2F6';g.beginPath();g.ellipse(x,y-14*s,7*s,2*s,0,0,7);g.fill();g.fillStyle='#7A5A3C';g.beginPath();g.ellipse(x,y-14*s,5.6*s,1.4*s,0,0,7);g.fill();
+ g.save();const clip=new Path2D();clip.rect(x-60*s,y-80*s,120*s,66*s);clip.ellipse(x,y-14*s,7*s,2*s,0,Math.PI,0,true);g.clip(clip);
+ [[-1,17],[-.5,21],[0,23],[.5,20],[1,16],[-.25,14],[.3,13]].forEach(([a,l],i)=>{g.save();g.translate(x,y-14*s);g.rotate(a*.85);g.fillStyle=i%2?'#3FAE5A':'#5BC46E';g.beginPath();g.moveTo(0,0);g.quadraticCurveTo(-5.5*s,-l*.55*s,0,-l*s);g.quadraticCurveTo(5.5*s,-l*.55*s,0,0);g.fill();g.restore();});
+ g.restore();g.strokeStyle='#EEF2F6';g.lineWidth=1.2*s;g.beginPath();g.ellipse(x,y-14*s,7*s,2*s,0,0,Math.PI);g.stroke();};
+F.slipper=(x,y,s,c)=>{shadowG(x,y,8*s,2.2*s,.2);ell3d(x,y-2*s,8*s,3*s,c,0);ell3d(x+3*s,y-2.6*s,3.6*s,2.1*s,'#FFFFFF',0);};
+F.toy=(x,y,s,k,c)=>{shadowG(x,y,7*s,2.2*s,.22);if(k===0)ball3d(x,y-5*s,5*s,c);else if(k===1)box3(x,y,9*s,8*s,5*s,c);else{coneR(x,y-1*s,6*s,9*s,c);ball3d(x,y-11*s,1.6*s,'#fff',0);}};
+// suelo de los barrios futuros: césped estándar (verde con matitas), bajo la niebla
+function grassStd(rect){g.fillStyle='#8FCB6A';g.fillRect(rect[0]-20,rect[1],rect[2]-rect[0]+40,rect[3]-rect[1]);const sd=seed;seed=(Math.floor(rect[1])*7+3)>>>0||1;
+ for(let i=0;i<(rect[2]-rect[0])*(rect[3]-rect[1])/700;i++){const x=R(rect[0],rect[2]),y=R(rect[1],rect[3]);g.strokeStyle=rnd()<.5?'#6FB552':'#A6DB80';g.lineWidth=1.6;g.beginPath();g.moveTo(x-3,y);g.lineTo(x-1,y-5);g.moveTo(x,y);g.lineTo(x+1,y-6);g.moveTo(x+3,y);g.lineTo(x+2,y-4);g.stroke();}seed=sd;}
+const _floor0=floorDraw;
+floorDraw=function(rect,T){_floor0(rect,T);for(let L=1;L<LVd.length;L++){if(!LVd[L].locked)continue;const y0=yOf(30*L+30),y1=yOf(30*L);const a=Math.max(rect[1],Math.min(y0,y1)),b=Math.min(rect[3],Math.max(y0,y1));if(b>a)grassStd([rect[0],a,rect[2],b]);}};
+// niebla continua: cubre su barrio ENTERO (de borde a borde, sin huecos); solo el primer barrio bloqueado se funde con el de antes
+fogDraw=function(r0){const L=LVd.findIndex(T=>T.locked),first=Math.abs(r0[3]-yOf(30*L))<2;const rect=r0;g.fillStyle='rgba(255,248,244,.84)';g.fillRect(-40,rect[1]-1,W+80,rect[3]-rect[1]+(first?-60:2));
+ if(first){g.fillStyle=lin(rect[3]-60,rect[3],[[0,'rgba(255,248,244,.84)'],[1,'rgba(255,248,244,0)']]);g.fillRect(-40,rect[3]-60,W+80,60);}
+ for(let i=0;i<8;i++){const x=R(-20,W+20),y=R(rect[1]+30,rect[3]-60);cloudPuff(x,y,R(1.4,2.2),.75);}};
+// cartel: placa más alta, etiqueta pequeña «BARRIO n», nombre grande (hasta 2 líneas), círculo del icono en el color claro
+function _wrap2(t,maxW,sz){g.font='700 '+sz+'px F';const w=t.split(' ');let a='',L=[];w.forEach(p=>{const q=a?a+' '+p:p;if(g.measureText(q).width>maxW&&a){L.push(a);a=p;}else a=q;});L.push(a);return L;}
+signAt=function(x,y,L){const T=LVd[L],c=(CFG.col&&CFG.col[L])||T.c,nm=(CFG.lv&&CFG.lv[L])||T.n;g.save();g.translate(x,y-14);
+ g.fillStyle=cyl(-3.5,3.5,'#8A5A34');rr(-3.5,24,7,30,2);g.fill();_feather(10,56,16,3.5,.2);
+ const H=70,W2=164;g.fillStyle=sh(c,-.35);rr(-W2/2,-H/2+3,W2,H,16);g.fill();g.fillStyle=lin(-H/2,H/2,[[0,sh(c,.18)],[1,sh(c,-.08)]]);rr(-W2/2,-H/2,W2,H,16);g.fill();g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1.6;rr(-W2/2+3,-H/2+3,W2-6,H-6,13);g.stroke();
+ g.fillStyle=sh(c,.62);g.beginPath();g.arc(-W2/2+30,0,21,0,7);g.fill();g.strokeStyle='rgba(255,255,255,.9)';g.lineWidth=2;g.stroke();fortIcon(-W2/2+30,9,.55,c);
+ g.font='900 8.5px N';const tag='BARRIO '+(L+1),tw=g.measureText(tag).width+10;g.fillStyle='rgba(255,255,255,.92)';rr(-W2/2+58,-H/2+8,tw,13,6.5);g.fill();txt(tag,-W2/2+58+tw/2,-H/2+14.8,8.5,sh(c,-.35),900,'center','N');
+ let sz=16,Ls=_wrap2(nm,W2-70,sz);while((Ls.length>2||Ls.some(q=>g.measureText(q).width>W2-70))&&sz>11){sz-=.5;Ls=_wrap2(nm,W2-70,sz);}
+ Ls.slice(0,2).forEach((q,i)=>txt(q,-W2/2+58,(Ls.length===1?6:-1+i*(sz+2))+4,sz,'#fff',700,'left'));
+ if(T.locked){g.font='900 10px N';const pw=g.measureText('PRÓXIMAMENTE').width+16;g.fillStyle='#22324F';rr(-pw/2,H/2+6,pw,16,8);g.fill();txt('PRÓXIMAMENTE',0,H/2+14.5,10,'#fff',900,'center','N');}
+ g.restore();};
+// paradas: color del barrio, sin sombra; ✓ hechas; dorada con comodín; la de hoy la tapa Savy
+drawStation=function(p){const x=p.x,y=p.y,r=21,c=p.gold?'#E2A21A':(CFG.col&&CFG.col[0])||'#F0727F';
+ if(p.home){fortIcon(x,y+6,.62,'#F7B6C3');return;}
+ if(p.cur)return;
+ const fc=p.lock?_hexL(c,.45):c;g.fillStyle=sh(fc,-.22);g.beginPath();g.arc(x,y+2,r,0,7);g.fill();g.fillStyle=lin(y-r,y+r,[[0,sh(fc,.2)],[1,fc]]);g.beginPath();g.arc(x,y-1,r,0,7);g.fill();g.lineWidth=2.5;g.strokeStyle='#fff';g.beginPath();g.arc(x,y-1,r-1.3,0,7);g.stroke();
+ if(p.done){g.strokeStyle='#fff';g.lineWidth=4;g.lineCap='round';g.beginPath();g.moveTo(x-8,y-1);g.lineTo(x-2,y+5);g.lineTo(x+9,y-7);g.stroke();}else txt(String(p.n),x,y-1,18,'#fff',700);
+ g.fillStyle='rgba(255,255,255,.6)';g.beginPath();g.ellipse(x-7,y-13,5,2.2,-.5,0,7);g.fill();};
+// botón de Savy arriba a la derecha: con el color del barrio cuando estás sobre Savy, blanco si no
+setInterval(()=>{try{const b=document.getElementById('hoy');if(!b||!booted)return;const p=roadXY(TODAY),on=Math.abs(cy-p[1])<vh*.3,c=(CFG.col&&CFG.col[0])||'#2FA38C';b.style.background=on?c:'#FFFFFF';b.style.color=on?'#FFFFFF':'#22324F';b.style.border='2px solid '+(on?sh(c,-.25):'#D8DEE8');}catch(e){}},250);
