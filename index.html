@@ -3,56 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Tiny Apps · Pequeñas apps para grandes hábitos</title>
-<meta name="description" content="Tiny Apps: TinyQuit para fumar menos a tu ritmo y, muy pronto, TinySave para ahorrar. Gratis.">
-<meta property="og:title" content="Tiny Apps"><meta property="og:description" content="Pequeñas apps para grandes hábitos ☁️🐷"><meta property="og:image" content="https://josepecina.github.io/tinyapps/islas.jpg">
+<title>Tiny Apps</title>
+<meta name="description" content="Tiny Apps: TinyQuit to smoke less at your own pace and, soon, TinySave to save money. Free.">
+<meta property="og:title" content="Tiny Apps"><meta property="og:description" content="Small apps for big habits ☁️"><meta property="og:image" content="https://josepecina.github.io/tinyapps/islas.jpg">
 <meta name="theme-color" content="#7FD0FF">
 <link rel="icon" href="logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-/* Mismo sistema visual que las apps (TinyQuit ui/theme.dart + widgets.dart): cielo, tarjetas blancas con sombra azul, botones 3D */
-:root{--ink:#22324F;--muted:#5A6785;--sh:0 14px 26px rgba(35,105,175,.18)}
+/* Web Tiny Apps (28 nov). Escala de espacios = la de las apps (GUIA-DISENO §0.3): bloque 16 · misma categoría 10-12 · padding de tarjeta 16 · margen a los bordes ≥ 16.
+   Se comprueba con _comun/qa/qa_espacios.py (todos los idiomas, móvil pequeño, móvil, tablet y ordenador) → ESPACIOS_WEB_OK. */
+:root{--ink:#22324F;--muted:#5A6785;--sh:0 14px 26px rgba(35,105,175,.18);--gap:16px;--same:12px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
+p,li,.tag,summary{text-wrap:pretty}
 body{font-family:Nunito,system-ui,sans-serif;font-weight:700;color:var(--ink);min-height:100vh;background:linear-gradient(#7FD0FF,#BDE8FF 45%,#DDF3FF 75%);overflow-x:hidden}
-.sky{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.sky{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 .puff{position:absolute;background:#fff;border-radius:999px;opacity:.9;animation:drift 22s linear infinite}
 .puff::before,.puff::after{content:"";position:absolute;background:#fff;border-radius:50%}
 .puff::before{width:55%;height:150%;left:15%;top:-70%}.puff::after{width:40%;height:120%;right:12%;top:-45%}
 .hills{position:fixed;left:0;right:0;bottom:0;z-index:-1;pointer-events:none}
-.wrap{max-width:520px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 120px}
+.wrap{max-width:520px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px 96px}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:var(--same)}
+.langbox{position:relative;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 6px 14px rgba(35,105,175,.18);font-family:Nunito;font-weight:900;font-size:15px;color:var(--ink)}
+.langbox svg{width:20px;height:20px;flex:none}
+.langbox select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px}
 header{text-align:center}
-.logo{width:92px;height:92px;border-radius:50%;box-shadow:var(--sh),inset 0 0 0 4px #fff;border:4px solid #fff;animation:float 3.4s ease-in-out infinite}
-h1{font-family:Fredoka;font-weight:700;font-size:clamp(42px,12vw,60px);margin:4px 0 0;line-height:1;color:var(--ink);text-shadow:0 3px 0 rgba(34,50,79,.12)}
+.logo{width:92px;height:92px;border-radius:50%;border:4px solid #fff;box-shadow:var(--sh);animation:float 3.4s ease-in-out infinite}
+h1{font-family:Fredoka;font-weight:700;font-size:clamp(40px,11vw,60px);margin:6px 0 0;line-height:1.05}
 h1 b{color:#1FA89A}
-.tag{color:var(--muted);font-weight:800;font-size:17px;margin:6px 0 14px}
-.social{display:flex;justify-content:center;gap:12px;margin-bottom:16px}
-.b3d{position:relative;display:flex;align-items:center;justify-content:center;gap:9px;border:0;cursor:pointer;text-decoration:none;font-family:Fredoka;font-weight:600;color:var(--ink);background:linear-gradient(#fff,#EEF5FB);border-radius:22px;box-shadow:0 7px 0 #C5D5E6,0 14px 20px rgba(35,105,175,.28),inset 0 3px 0 rgba(255,255,255,.55);transition:transform .09s,box-shadow .09s}
-.b3d:active{transform:translateY(5px);box-shadow:0 2px 0 #C5D5E6,0 5px 10px rgba(35,105,175,.28),inset 0 3px 0 rgba(255,255,255,.55)}
-.social .b3d{width:58px;height:58px;border-radius:50%}.social svg{width:26px;height:26px}
-.blue{color:#fff;background:linear-gradient(#5CB8FF,#2E9BE6);box-shadow:0 7px 0 #1F78C2,0 14px 20px rgba(35,105,175,.28),inset 0 3px 0 rgba(255,255,255,.35)}
-.blue:active{box-shadow:0 2px 0 #1F78C2,0 5px 10px rgba(35,105,175,.28)}
+.tag{color:var(--muted);font-weight:800;font-size:17px;line-height:1.35;margin:8px 0 var(--gap)}
+.social{display:flex;justify-content:center;gap:var(--same);margin-bottom:var(--gap)}
+.b3d{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;text-decoration:none;font-family:Fredoka;font-weight:600;color:var(--ink);background:linear-gradient(#fff,#EEF5FB);border-radius:22px;box-shadow:0 7px 0 #C5D5E6,0 14px 20px rgba(35,105,175,.28),inset 0 3px 0 rgba(255,255,255,.55);transition:transform .09s,box-shadow .09s;min-width:0}
+.b3d:active{transform:translateY(5px);box-shadow:0 2px 0 #C5D5E6,0 5px 10px rgba(35,105,175,.28)}
+.social .b3d{width:56px;height:56px;border-radius:50%}.social svg{width:26px;height:26px}
+.dark{color:#fff;background:linear-gradient(#3A4A68,#1D2940);box-shadow:0 7px 0 #0F1726,0 14px 20px rgba(20,30,50,.3),inset 0 3px 0 rgba(255,255,255,.18)}
+.dark:active{box-shadow:0 2px 0 #0F1726,0 5px 10px rgba(20,30,50,.3)}
 .gold{color:#5A3E00;background:linear-gradient(#FFE27A,#F5C02E);box-shadow:0 7px 0 #C99400,0 14px 20px rgba(201,148,0,.25),inset 0 3px 0 rgba(255,255,255,.5)}
 .gold:active{box-shadow:0 2px 0 #C99400,0 5px 10px rgba(201,148,0,.25)}
-.islas{width:100%;border-radius:26px;display:block;box-shadow:var(--sh);border:4px solid #fff;margin-bottom:18px}
-.card{background:#fff;border-radius:28px;padding:16px;box-shadow:var(--sh),inset 0 -6px 0 rgba(160,200,235,.35);margin-bottom:16px;animation:pop .5s cubic-bezier(.2,1.5,.4,1) both}
-.row{display:flex;gap:14px;align-items:center;min-height:84px}
-.ico{width:84px;height:84px;border-radius:22px;flex:none;box-shadow:0 6px 14px rgba(35,105,175,.25)}
-.name{font-family:Fredoka;font-weight:700;font-size:30px;line-height:1;margin:0}
+.off{opacity:.55;cursor:default;pointer-events:none}
+.islas{width:100%;aspect-ratio:3/1;object-fit:cover;border-radius:26px;display:block;box-shadow:var(--sh);border:4px solid #fff;margin-bottom:var(--gap)}
+.card{background:#fff;border-radius:28px;padding:16px;box-shadow:var(--sh),inset 0 -6px 0 rgba(160,200,235,.35);margin-bottom:var(--gap);animation:pop .5s cubic-bezier(.2,1.5,.4,1) both}
+.row{display:flex;gap:14px;align-items:center}
+.ico{width:76px;height:76px;border-radius:20px;flex:none;box-shadow:0 6px 14px rgba(35,105,175,.25)}
+.txt{min-width:0;flex:1}
+.name{font-family:Fredoka;font-weight:700;font-size:28px;line-height:1.05;margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .name b{color:#2E9BE6}.save .name b{color:#E0A800}
-.what{margin:5px 0 0;font-weight:800;font-size:15.5px;color:var(--muted)}
-.btns{display:grid;gap:12px;margin-top:16px}.btns.two{grid-template-columns:1fr 1fr}
-.btns .b3d{height:56px;font-size:19px}.btns svg{width:22px;height:22px}
-.chip{display:inline-block;font-family:Nunito;font-weight:900;font-size:12px;letter-spacing:.3px;padding:3px 10px;border-radius:999px;vertical-align:4px;margin-left:6px}
-.chip.soon{background:#FFF3C4;color:#9A6B00}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.mini{background:#fff;border-radius:28px;padding:16px 12px;box-shadow:var(--sh),inset 0 -6px 0 rgba(160,200,235,.35);text-align:center;animation:pop .5s cubic-bezier(.2,1.5,.4,1) both}
-.q{display:grid;place-items:center;font-size:40px;background:linear-gradient(#EEF7FF,#DDEBF8);box-shadow:inset 0 -5px 0 rgba(160,200,235,.5)} .mini .q{width:84px;height:84px;border-radius:22px;margin:0 auto 10px;display:grid;place-items:center;font-size:38px;background:linear-gradient(#EEF7FF,#DDEBF8);box-shadow:inset 0 -5px 0 rgba(160,200,235,.5)}
-.mini .name{font-size:24px;color:#B5C2D6}
-.note{font-size:13px;color:var(--muted);margin:10px 4px 0;text-align:center}
-footer{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}footer a{color:var(--ink)}
+.what{margin:6px 0 0;font-weight:800;font-size:15.5px;line-height:1.35;color:var(--muted)}
+.btns{display:grid;gap:var(--same);margin-top:var(--gap)}
+.store{height:60px;justify-content:flex-start;padding:0 16px;border-radius:18px}
+.store svg{width:26px;height:26px;flex:none}
+.store .lb{display:flex;flex-direction:column;align-items:flex-start;min-width:0;overflow:hidden;line-height:1.1}
+.store small{font-family:Nunito;font-weight:800;font-size:12px;opacity:.85;white-space:nowrap}
+.store span.big{font-size:20px;white-space:nowrap}
+.wide{height:56px;font-size:18px;padding:0 16px}
+.fit{display:block;white-space:nowrap;overflow:hidden;max-width:100%}
+.fit.mq>span{display:inline-block;animation:mq 6s ease-in-out infinite alternate}
+.chip{font-family:Nunito;font-weight:900;font-size:11.5px;letter-spacing:.3px;padding:4px 10px;border-radius:999px;background:#FFF3C4;color:#9A6B00;line-height:1.2}
+details{margin-top:var(--same);border-radius:18px;background:#F4F8FC}
+summary{list-style:none;cursor:pointer;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:Fredoka;font-weight:600;font-size:17px;padding:0 16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:9px;height:9px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg) translateY(-3px);transition:transform .2s}
+details[open] summary::after{transform:rotate(225deg) translateY(-3px)}
+ol{margin:0;padding:0 16px 16px 38px;font-size:15px;line-height:1.5}ol li+li{margin-top:6px}
+.next .name{font-size:24px}
+.minis{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--same);margin-top:var(--gap)}
+.mini{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:20px;background:linear-gradient(#EEF7FF,#DDEBF8);box-shadow:inset 0 -5px 0 rgba(160,200,235,.5)}
+.mini .q{font-size:34px;line-height:1}
+.mini .lock{width:18px;height:18px}
+footer{margin-top:var(--gap);text-align:center;color:var(--muted)}
+.foot{background:rgba(255,255,255,.85);border-radius:28px;padding:16px;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:var(--same)}
+.mail{height:48px;padding:0 18px;font-size:16px;border-radius:999px}
+.legal{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.legal a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:#EEF5FB;color:var(--ink);text-decoration:none;font-weight:800;font-size:14px}
+.legal .t{width:100%;font-size:12px;font-weight:900;letter-spacing:.4px;color:#8A98B2}
+.made{font-size:13px;font-weight:800;margin:0;line-height:1.4}
+/* Ordenador y tablet: dos columnas, la cabecera a la izquierda (fija) y las apps a la derecha */
+@media (min-width:900px){
+ .wrap{max-width:1080px;padding:24px 32px 120px;display:grid;grid-template-columns:400px 1fr;column-gap:40px;align-items:start}
+ .topbar{grid-column:1/-1}
+ .left{position:sticky;top:24px}
+ h1{font-size:60px}
+ footer{grid-column:1/-1}
+ .btns.stores{grid-template-columns:1fr 1fr}
+}
 @keyframes float{50%{transform:translateY(-7px)}}@keyframes pop{from{transform:scale(.92) translateY(16px);opacity:0}}
 @keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+@keyframes mq{0%,15%{transform:translateX(0)}85%,100%{transform:translateX(var(--mq))}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
 <body>
@@ -61,52 +98,83 @@ footer{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}footer
   <div class="puff" style="width:100px;height:30px;top:30%;animation-duration:30s;animation-delay:-12s"></div>
   <div class="puff" style="width:160px;height:46px;top:55%;animation-duration:44s;animation-delay:-25s"></div>
 </div>
-<svg class="hills" viewBox="0 0 400 120" preserveAspectRatio="none" height="120" width="100%"><path d="M0 60 Q100 20 200 50 T400 40 V120 H0Z" fill="#9BE58A"/><path d="M0 85 Q120 55 240 80 T400 75 V120 H0Z" fill="#5FD46A"/></svg>
+<svg class="hills" viewBox="0 0 400 120" preserveAspectRatio="none" height="110" width="100%"><path d="M0 60 Q100 20 200 50 T400 40 V120 H0Z" fill="#9BE58A"/><path d="M0 85 Q120 55 240 80 T400 75 V120 H0Z" fill="#5FD46A"/></svg>
 <div class="wrap">
-  <header>
-    <img class="logo" src="logo.jpg" alt="Tiny con su corona y Savy">
-    <h1>Tiny <b>Apps</b></h1>
-    <div class="tag">Pequeñas apps para grandes hábitos</div>
-    <nav class="social">
-      <a class="b3d" href="https://www.tiktok.com/@hellotinyapps" aria-label="TikTok"><svg viewBox="0 0 24 24"><path fill="#22324F" d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.7 5.7 0 1 0 4.9 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.2-1.6z"/></svg></a>
-      <a class="b3d" href="https://www.instagram.com/hellotinyapps/" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#22324F" stroke-width="2.2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="#22324F" stroke-width="2.2"/><circle cx="17.3" cy="6.7" r="1.3" fill="#22324F"/></svg></a>
-      <a class="b3d" href="https://www.youtube.com/@hellotinyapps" aria-label="YouTube"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="#FF3B3B"/><path d="M10 9l5 3-5 3z" fill="#fff"/></svg></a>
-    </nav>
-  </header>
-  <img class="islas" src="islas.jpg" alt="El archipiélago de Tiny Apps: una isla por app">
-  <section class="card quit">
-    <div class="row"><img class="ico" src="tinyquit.jpg" alt="TinyQuit"><div><p class="name">Tiny<b>Quit</b></p><p class="what">Fuma menos, a tu ritmo, con Tiny ☁️</p></div></div>
-    <div class="btns" id="dl"></div>
-    <div class="btns" style="margin-top:14px"><a class="b3d" id="tester" href="https://groups.google.com/g/tinyapps-testers" target="_blank" rel="noopener">🧪 Hazte tester</a></div>
-  </section>
-  <section class="card save">
-    <div class="row"><img class="ico" src="tinysave.jpg" alt="TinySave"><div><p class="name">Tiny<b>Save</b><span class="chip soon">MUY PRONTO</span></p><p class="what">Frena los caprichos y mira crecer tu dinero, con Savy 🐷</p></div></div>
-    <div class="btns"><a class="b3d gold" href="https://groups.google.com/g/tinyapps-testers" target="_blank" rel="noopener">🔔 Apúntame para probarla</a></div>
-  </section>
-  <section class="card" id="tester-info"><p class="name" style="font-size:24px">🧪 Cómo ser tester</p>
-    <ol style="margin:10px 0 0;padding-left:22px;font-size:15.5px;line-height:1.5;color:#22324F">
-      <li>Pulsa <b>Hazte tester</b>: se abre el grupo de Google <b>tinyapps-testers</b>.</li>
-      <li>Pulsa el botón <b>«Unirse al grupo»</b> (arriba, es pequeñito). <b>Si no lo pulsas, no entras.</b></li>
-      <li>Usa la <b>misma cuenta de Gmail</b> que tienes en Google Play.</li>
-      <li>Te llegará un email con el enlace para probar TinyQuit, y otro cada vez que salga una app nueva para probarla antes que nadie 💌</li>
-    </ol></section>
-  <section class="card"><div class="row"><div class="ico q">📚</div><div><p class="name" style="color:#B5C2D6">Tiny···</p><p class="what">¿Adivinas cuál viene? Una pista: 📚</p></div></div><div class="btns"><span class="b3d" style="color:#9AA8BF;cursor:default">🔒 Próximamente</span></div></section>
-  <section class="card"><div class="row"><div class="ico q">⛰️</div><div><p class="name" style="color:#B5C2D6">Tiny···</p><p class="what">¿Adivinas cuál viene? Una pista: ⛰️</p></div></div><div class="btns"><span class="b3d" style="color:#9AA8BF;cursor:default">🔒 Próximamente</span></div></section>
-  <section class="card"><div class="row"><div class="ico q">🌙</div><div><p class="name" style="color:#B5C2D6">Tiny···</p><p class="what">¿Adivinas cuál viene? Una pista: 🌙</p></div></div><div class="btns"><span class="b3d" style="color:#9AA8BF;cursor:default">🔒 Próximamente</span></div></section>
-  <footer>Hecho con ☁️ por Tiny Apps · <a href="mailto:hellotinyapps@gmail.com">hellotinyapps@gmail.com</a></footer>
+  <div class="topbar">
+    <label class="langbox"><svg viewBox="0 0 24 24" fill="none" stroke="#22324F" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span id="langName">Español</span><select id="lang" aria-label="Language"></select></label>
+  </div>
+  <div class="left">
+    <header>
+      <img class="logo" src="logo.jpg" alt="Tiny">
+      <h1>Tiny <b>Apps</b></h1>
+      <div class="tag" data-t="tag"></div>
+      <nav class="social" aria-label="social">
+        <a class="b3d" href="https://www.tiktok.com/@hellotinyapps" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="#22324F" d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.7 5.7 0 1 0 4.9 5.7V9.1a7.4 7.4 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.2-1.6z"/></svg></a>
+        <a class="b3d" href="https://www.instagram.com/hellotinyapps/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#22324F" stroke-width="2.2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="#22324F" stroke-width="2.2"/><circle cx="17.3" cy="6.7" r="1.3" fill="#22324F"/></svg></a>
+        <a class="b3d" href="https://www.youtube.com/@hellotinyapps" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="#FF3B3B"/><path d="M10 9l5 3-5 3z" fill="#fff"/></svg></a>
+      </nav>
+    </header>
+    <img class="islas" src="islas.jpg" alt="Tiny Apps">
+  </div>
+  <main>
+    <section class="card quit">
+      <div class="row"><img class="ico" src="tinyquit.jpg" alt="TinyQuit"><div class="txt"><p class="name"><span>Tiny<b>Quit</b></span></p><p class="what" data-t="quit"></p></div></div>
+      <div class="btns stores" id="stores"></div>
+    </section>
+    <section class="card save">
+      <div class="row"><img class="ico" src="tinysave.jpg" alt="TinySave"><div class="txt"><p class="name"><span>Tiny<b>Save</b></span><span class="chip" data-t="soon"></span></p><p class="what" data-t="save"></p></div></div>
+      <div class="btns"><a class="b3d gold wide" href="https://groups.google.com/g/tinyapps-testers" target="_blank" rel="noopener"><span class="fit"><span data-t="saveBtn"></span></span></a></div>
+      <details><summary data-t="how"></summary><ol><li data-t="s1"></li><li data-t="s2"></li><li data-t="s3"></li><li data-t="s4"></li></ol></details>
+    </section>
+    <section class="card next">
+      <p class="name"><span data-t="next"></span><span class="chip" data-t="locked"></span></p><p class="what" data-t="nextTxt"></p>
+      <div class="minis"><div class="mini" aria-label="?"><span class="q">📚</span><svg class="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="#8A98B2"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="#8A98B2" stroke-width="2.4"/></svg></div><div class="mini" aria-label="?"><span class="q">⛰️</span><svg class="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="#8A98B2"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="#8A98B2" stroke-width="2.4"/></svg></div><div class="mini" aria-label="?"><span class="q">🌙</span><svg class="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="#8A98B2"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="#8A98B2" stroke-width="2.4"/></svg></div></div>
+    </section>
+  </main>
+  <footer>
+    <div class="foot">
+      <a class="b3d mail" href="mailto:hellotinyapps@gmail.com"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22324F" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg><span data-t="contact"></span></a>
+      <div class="legal"><span class="t" data-t="legal"></span><a id="lpriv" data-t="privacy" target="_blank" rel="noopener"></a><a id="lterm" data-t="terms" target="_blank" rel="noopener"></a><a id="ldel" data-t="del" target="_blank" rel="noopener"></a></div>
+      <p class="made"><span data-t="made"></span><br>hellotinyapps@gmail.com</p>
+    </div>
+  </footer>
 </div>
+<script src="i18n.js"></script>
 <script>
 (function(){
-  var pkg='com.tinyapps.tinyquit', web='https://play.google.com/store/apps/details?id='+pkg, ua=navigator.userAgent||'';
-  var android=/Android/i.test(ua), ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-  var gp='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 2.5l10.3 9.5L4 21.5c-.4-.2-.6-.6-.6-1.1V3.6c0-.5.2-.9.6-1.1zm11.3 10.4l2.5 2.3-11 6.2 8.5-8.5zm0-1.8L6.8 2.6l11 6.2-2.5 2.3zm3.7-1.6l2.4 1.4c.8.5.8 1.7 0 2.2l-2.4 1.4-2.8-2.5 2.8-2.5z"/></svg>';
-  var ap='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.5 2-3.6a4.3 4.3 0 0 0-3.4-1.8c-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8a4.5 4.5 0 0 0-3.8 2.3c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3s1.6-.7 3-.7 1.8.7 3 .7 2-1.1 2.8-2.3a9.7 9.7 0 0 0 1.3-2.6 4 4 0 0 1-2.5-3.6zM14.1 5.5A4 4 0 0 0 15 2.6a4.1 4.1 0 0 0-2.7 1.4 3.8 3.8 0 0 0-1 2.8 3.4 3.4 0 0 0 2.8-1.3z"/></svg>';
-  var intent='intent://details?id='+pkg+'#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url='+encodeURIComponent(web)+';end';
-  var dl=document.getElementById('dl');
-  if(android){dl.innerHTML='<a class="b3d blue" href="'+intent+'">'+gp+'Descárgala gratis</a>';}
-  else if(ios){dl.innerHTML='<a class="b3d blue" href="#" onclick="document.getElementById(\'n\').hidden=false;return false">'+ap+'iPhone · muy pronto</a>';var t=document.getElementById('tester');t.textContent='🔔 Avísame cuando salga';}
-  else{dl.className='btns two';dl.innerHTML='<a class="b3d blue" href="'+web+'">'+gp+'Android</a><a class="b3d" href="#" onclick="document.getElementById(\'n\').hidden=false;return false">'+ap+'iPhone</a>';}
-  dl.insertAdjacentHTML('afterend','<p class="note" id="n" '+(ios?'':'hidden')+'>En iPhone llega muy pronto 💙 Síguenos para enterarte el primero.</p>');
+  // ── Configuración (cambiar aquí cuando haya novedades) ──
+  var PKG='com.tinyapps.tinyquit', GP='https://play.google.com/store/apps/details?id='+PKG;
+  var APPSTORE='';  // cuando Apple apruebe: 'https://apps.apple.com/app/id6837468388'
+  var LEGAL='https://josepecina.github.io/tinyquit/';
+  var T=window.TA_I18N, codes=Object.keys(T);
+  var ua=navigator.userAgent||'', android=/Android/i.test(ua), ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  function pick(){
+    var q=(location.search.match(/[?&]lang=([a-z]{2})/)||[])[1]; if(q&&T[q]) return q;
+    try{var s=localStorage.getItem('ta.lang'); if(s&&T[s]) return s;}catch(e){}
+    var L=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'en']);
+    for(var i=0;i<L.length;i++){var c=String(L[i]).slice(0,2).toLowerCase(); if(T[c]) return c;}
+    return 'en';
+  }
+  var gpI='<svg viewBox="0 0 24 24"><path fill="#34A853" d="M4 2.5l10.3 9.5L4 21.5c-.4-.2-.6-.6-.6-1.1V3.6c0-.5.2-.9.6-1.1z"/><path fill="#FBBC04" d="M19 9.5l2.4 1.4c.8.5.8 1.7 0 2.2L19 14.5 16.2 12z"/><path fill="#EA4335" d="M15.3 12.9l2.5 2.3-11 6.2z"/><path fill="#4285F4" d="M15.3 11.1L6.8 2.6l11 6.2z"/></svg>';
+  var apI='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.5 2-3.6a4.3 4.3 0 0 0-3.4-1.8c-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8a4.5 4.5 0 0 0-3.8 2.3c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3s1.6-.7 3-.7 1.8.7 3 .7 2-1.1 2.8-2.3a9.7 9.7 0 0 0 1.3-2.6 4 4 0 0 1-2.5-3.6zM14.1 5.5A4 4 0 0 0 15 2.6a4.1 4.1 0 0 0-2.7 1.4 3.8 3.8 0 0 0-1 2.8 3.4 3.4 0 0 0 2.8-1.3z"/></svg>';
+  function storeBtn(cls,href,icon,small,big,off){return '<a class="b3d store '+cls+(off?' off':'')+'" '+(off?'aria-disabled="true"':'href="'+href+'" target="_blank" rel="noopener"')+'>'+icon+'<span class="lb"><small class="fit"><span>'+small+'</span></small><span class="big fit"><span>'+big+'</span></span></span></a>';}
+  function render(c){
+    var t=T[c]; document.documentElement.lang=c; document.getElementById('langName').textContent=t.name;
+    document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=t[e.getAttribute('data-t')]||T.en[e.getAttribute('data-t')];});
+    var es=c==='es'; document.getElementById('lpriv').href=LEGAL+(es?'privacidad.html':'privacy.html'); document.getElementById('lterm').href=LEGAL+(es?'terminos.html':'terms.html'); document.getElementById('ldel').href=LEGAL+'borrar-cuenta.html';
+    var g=storeBtn('',GP,gpI,t.gp,'Google Play',false), a=storeBtn('dark',APPSTORE,apI,APPSTORE?t.as:t.asSoon,'App Store',!APPSTORE);
+    document.getElementById('stores').innerHTML = ios ? a+g : g+a;
+    requestAnimationFrame(fitAll);
+  }
+  // Textos de botón: si no caben, se reducen hasta el 80 %; si aun así no caben, se desplazan de lado a lado (GUIA-DISENO §0.2b)
+  function fitAll(){document.querySelectorAll('.fit').forEach(function(f){var s=f.firstElementChild; f.classList.remove('mq'); s.style.fontSize=''; var base=parseFloat(getComputedStyle(f).fontSize);
+    for(var k=1;k>=0.8&&f.scrollWidth>f.clientWidth+1;k-=0.05){s.style.fontSize=(base*k)+'px';}
+    if(f.scrollWidth>f.clientWidth+1){f.style.setProperty('--mq',(f.clientWidth-s.offsetWidth)+'px');f.classList.add('mq');f.setAttribute('data-fit','marquee');} else f.setAttribute('data-fit','ok');});}
+  var sel=document.getElementById('lang'); codes.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=T[c].name;sel.appendChild(o);});
+  var cur=pick(); sel.value=cur; render(cur);
+  sel.addEventListener('change',function(){try{localStorage.setItem('ta.lang',sel.value);}catch(e){} render(sel.value);});
+  window.addEventListener('resize',function(){requestAnimationFrame(fitAll);});
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitAll);
 })();
 </script>
 </body>
