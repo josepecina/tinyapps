@@ -11,8 +11,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-/* Web Tiny Apps (28 nov). Escala de espacios = la de las apps (GUIA-DISENO §0.3): bloque 16 · misma categoría 10-12 · padding de tarjeta 16 · margen a los bordes ≥ 16.
-   Se comprueba con _comun/qa/qa_espacios.py (todos los idiomas, móvil pequeño, móvil, tablet y ordenador) → ESPACIOS_WEB_OK. */
+/* Web Tiny Apps (28 nov, v2). Escala de espacios = la de las apps (GUIA-DISENO §0.3 y §0.15): bloque 16 · misma categoría 12 · padding 16 · bordes ≥ 16.
+   Se comprueba con _comun/qa/qa_espacios.py (13 idiomas × móvil pequeño, móvil, tablet, ordenador) → ESPACIOS_WEB_OK.
+   App nueva = una línea más en APPS (abajo, en el script). Idioma nuevo = i18n.js. */
 :root{--ink:#22324F;--muted:#5A6785;--sh:0 14px 26px rgba(35,105,175,.18);--gap:16px;--same:12px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
 p,li,.tag,summary{text-wrap:pretty}
@@ -23,10 +24,14 @@ body{font-family:Nunito,system-ui,sans-serif;font-weight:700;color:var(--ink);mi
 .puff::before{width:55%;height:150%;left:15%;top:-70%}.puff::after{width:40%;height:120%;right:12%;top:-45%}
 .hills{position:fixed;left:0;right:0;bottom:0;z-index:-1;pointer-events:none}
 .wrap{max-width:520px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px 96px}
-.topbar{display:flex;justify-content:flex-end;margin-bottom:var(--same)}
-.langbox{position:relative;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 6px 14px rgba(35,105,175,.18);font-family:Nunito;font-weight:900;font-size:15px;color:var(--ink)}
-.langbox svg{width:20px;height:20px;flex:none}
-.langbox select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:var(--same);position:relative;z-index:5}
+.flag{flex:none;border-radius:4px;box-shadow:0 2px 4px rgba(34,50,79,.15)}
+.langbtn{display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 14px;border:0;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 6px 14px rgba(35,105,175,.18);font-family:Nunito;font-weight:900;font-size:15px;color:var(--ink);cursor:pointer}
+.langbtn .chev{width:9px;height:9px;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(45deg) translateY(-2px);margin:0 2px 0 2px}
+.langmenu{position:absolute;right:0;top:52px;width:250px;max-height:min(70vh,560px);overflow:auto;background:#fff;border-radius:20px;padding:8px;box-shadow:0 16px 40px rgba(35,105,175,.28);display:none}
+.langmenu.open{display:block}
+.langmenu button{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:0 12px;border:0;border-radius:14px;background:none;font-family:Nunito;font-weight:800;font-size:15px;color:var(--ink);cursor:pointer;text-align:left}
+.langmenu button:hover,.langmenu button.on{background:#EEF5FB}
 header{text-align:center}
 .logo{width:92px;height:92px;border-radius:50%;border:4px solid #fff;box-shadow:var(--sh);animation:float 3.4s ease-in-out infinite}
 h1{font-family:Fredoka;font-weight:700;font-size:clamp(40px,11vw,60px);margin:6px 0 0;line-height:1.05}
@@ -36,25 +41,28 @@ h1 b{color:#1FA89A}
 .b3d{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;text-decoration:none;font-family:Fredoka;font-weight:600;color:var(--ink);background:linear-gradient(#fff,#EEF5FB);border-radius:22px;box-shadow:0 7px 0 #C5D5E6,0 14px 20px rgba(35,105,175,.28),inset 0 3px 0 rgba(255,255,255,.55);transition:transform .09s,box-shadow .09s;min-width:0}
 .b3d:active{transform:translateY(5px);box-shadow:0 2px 0 #C5D5E6,0 5px 10px rgba(35,105,175,.28)}
 .social .b3d{width:56px;height:56px;border-radius:50%}.social svg{width:26px;height:26px}
-.dark{color:#fff;background:linear-gradient(#3A4A68,#1D2940);box-shadow:0 7px 0 #0F1726,0 14px 20px rgba(20,30,50,.3),inset 0 3px 0 rgba(255,255,255,.18)}
-.dark:active{box-shadow:0 2px 0 #0F1726,0 5px 10px rgba(20,30,50,.3)}
 .gold{color:#5A3E00;background:linear-gradient(#FFE27A,#F5C02E);box-shadow:0 7px 0 #C99400,0 14px 20px rgba(201,148,0,.25),inset 0 3px 0 rgba(255,255,255,.5)}
 .gold:active{box-shadow:0 2px 0 #C99400,0 5px 10px rgba(201,148,0,.25)}
-.off{opacity:.55;cursor:default;pointer-events:none}
+.teal{color:#fff;background:linear-gradient(#3FD0BF,#1FA89A);box-shadow:0 7px 0 #14806F,0 14px 20px rgba(31,168,154,.3),inset 0 3px 0 rgba(255,255,255,.3)}
+.teal:active{box-shadow:0 2px 0 #14806F,0 5px 10px rgba(31,168,154,.3)}
 .islas{width:100%;aspect-ratio:3/1;object-fit:cover;border-radius:26px;display:block;box-shadow:var(--sh);border:4px solid #fff;margin-bottom:var(--gap)}
 .card{background:#fff;border-radius:28px;padding:16px;box-shadow:var(--sh),inset 0 -6px 0 rgba(160,200,235,.35);margin-bottom:var(--gap);animation:pop .5s cubic-bezier(.2,1.5,.4,1) both}
 .row{display:flex;gap:14px;align-items:center}
 .ico{width:76px;height:76px;border-radius:20px;flex:none;box-shadow:0 6px 14px rgba(35,105,175,.25)}
 .txt{min-width:0;flex:1}
 .name{font-family:Fredoka;font-weight:700;font-size:28px;line-height:1.05;margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-.name b{color:#2E9BE6}.save .name b{color:#E0A800}
 .what{margin:6px 0 0;font-weight:800;font-size:15.5px;line-height:1.35;color:var(--muted)}
 .btns{display:grid;gap:var(--same);margin-top:var(--gap)}
-.store{height:60px;justify-content:flex-start;padding:0 16px;border-radius:18px}
-.store svg{width:26px;height:26px;flex:none}
-.store .lb{display:flex;flex-direction:column;align-items:flex-start;min-width:0;overflow:hidden;line-height:1.1}
-.store small{font-family:Nunito;font-weight:800;font-size:12px;opacity:.85;white-space:nowrap}
-.store span.big{font-size:20px;white-space:nowrap}
+/* Botones de tienda con el diseño oficial (negro, borde gris, logo, texto pequeño arriba y nombre grande) */
+.badge{position:relative;display:flex;align-items:center;gap:12px;height:58px;padding:0 18px;border-radius:12px;background:#000;border:1.5px solid #A6A6A6;color:#fff;text-decoration:none;font-family:-apple-system,"SF Pro Text","Helvetica Neue",Roboto,Arial,sans-serif;min-width:0}
+.badge svg.logo2{width:28px;height:28px;flex:none}
+.badge .lb{display:flex;flex-direction:column;min-width:0;line-height:1.05}
+.badge small{font-size:11px;font-weight:500;letter-spacing:.2px;white-space:nowrap}
+.badge .big{font-size:22px;font-weight:600;letter-spacing:-.2px;white-space:nowrap}
+.badge.off{opacity:.45;cursor:default}
+.badge .lb{flex:1 1 auto}
+.badge .soon{flex:none;margin-left:auto;font-family:Nunito;font-weight:900;font-size:11.5px;padding:4px 10px;border-radius:999px;background:#FFF3C4;color:#9A6B00;white-space:nowrap}
+.badge.off .soon{opacity:1}
 .wide{height:56px;font-size:18px;padding:0 16px}
 .fit{display:block;white-space:nowrap;overflow:hidden;max-width:100%}
 .fit.mq>span{display:inline-block;animation:mq 6s ease-in-out infinite alternate}
@@ -68,16 +76,18 @@ ol{margin:0;padding:0 16px 16px 38px;font-size:15px;line-height:1.5}ol li+li{mar
 .next .name{font-size:24px}
 .minis{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--same);margin-top:var(--gap)}
 .mini{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:20px;background:linear-gradient(#EEF7FF,#DDEBF8);box-shadow:inset 0 -5px 0 rgba(160,200,235,.5)}
-.mini .q{font-size:34px;line-height:1}
-.mini .lock{width:18px;height:18px}
+.mini .q{font-size:34px;line-height:1}.mini .lock{width:18px;height:18px}
 footer{margin-top:var(--gap);text-align:center;color:var(--muted)}
-.foot{background:rgba(255,255,255,.85);border-radius:28px;padding:16px;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:var(--same)}
-.mail{height:48px;padding:0 18px;font-size:16px;border-radius:999px}
-.legal{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
-.legal a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:#EEF5FB;color:var(--ink);text-decoration:none;font-weight:800;font-size:14px}
-.legal .t{width:100%;font-size:12px;font-weight:900;letter-spacing:.4px;color:#8A98B2}
-.made{font-size:13px;font-weight:800;margin:0;line-height:1.4}
-/* Ordenador y tablet: dos columnas, la cabecera a la izquierda (fija) y las apps a la derecha */
+.foot{background:rgba(255,255,255,.88);border-radius:28px;padding:16px;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:var(--same)}
+.frow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:var(--same);width:100%}
+.contact{height:52px;padding:0 22px;font-size:17px;border-radius:999px;flex:1 1 100%}
+.contact svg{width:22px;height:22px}
+.lk{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;background:#EEF5FB;color:var(--ink);text-decoration:none;font-weight:800;font-size:14.5px;text-align:center}
+.made{margin:4px 0 0;font-size:13.5px;font-weight:800;line-height:1.45}
+.made span{display:block}
+.made .mail{color:var(--ink)}
+.made .copy{font-size:12px;color:#8A98B2}
+/* Ordenador y tablet: dos columnas, Tiny Apps a la izquierda (fija) y las apps a la derecha */
 @media (min-width:900px){
  .wrap{max-width:1080px;padding:24px 32px 120px;display:grid;grid-template-columns:400px 1fr;column-gap:40px;align-items:start}
  .topbar{grid-column:1/-1}
@@ -85,6 +95,8 @@ footer{margin-top:var(--gap);text-align:center;color:var(--muted)}
  h1{font-size:60px}
  footer{grid-column:1/-1}
  .btns.stores{grid-template-columns:1fr 1fr}
+ .contact{flex:0 0 auto;height:44px;padding:0 16px;font-size:14.5px;font-family:Nunito;font-weight:800;box-shadow:0 4px 0 #14806F,0 8px 14px rgba(31,168,154,.25)}
+ .contact svg{width:18px;height:18px}
 }
 @keyframes float{50%{transform:translateY(-7px)}}@keyframes pop{from{transform:scale(.92) translateY(16px);opacity:0}}
 @keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
@@ -101,7 +113,8 @@ footer{margin-top:var(--gap);text-align:center;color:var(--muted)}
 <svg class="hills" viewBox="0 0 400 120" preserveAspectRatio="none" height="110" width="100%"><path d="M0 60 Q100 20 200 50 T400 40 V120 H0Z" fill="#9BE58A"/><path d="M0 85 Q120 55 240 80 T400 75 V120 H0Z" fill="#5FD46A"/></svg>
 <div class="wrap">
   <div class="topbar">
-    <label class="langbox"><svg viewBox="0 0 24 24" fill="none" stroke="#22324F" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span id="langName">Español</span><select id="lang" aria-label="Language"></select></label>
+    <button class="langbtn" id="langbtn" aria-haspopup="listbox" aria-expanded="false"><span id="langflag"></span><span id="langName">Español</span><span class="chev"></span></button>
+    <div class="langmenu" id="langmenu" role="listbox"></div>
   </div>
   <div class="left">
     <header>
@@ -117,37 +130,38 @@ footer{margin-top:var(--gap);text-align:center;color:var(--muted)}
     <img class="islas" src="islas.jpg" alt="Tiny Apps">
   </div>
   <main>
-    <section class="card quit">
-      <div class="row"><img class="ico" src="tinyquit.jpg" alt="TinyQuit"><div class="txt"><p class="name"><span>Tiny<b>Quit</b></span></p><p class="what" data-t="quit"></p></div></div>
-      <div class="btns stores" id="stores"></div>
-    </section>
-    <section class="card save">
-      <div class="row"><img class="ico" src="tinysave.jpg" alt="TinySave"><div class="txt"><p class="name"><span>Tiny<b>Save</b></span><span class="chip" data-t="soon"></span></p><p class="what" data-t="save"></p></div></div>
-      <div class="btns"><a class="b3d gold wide" href="https://groups.google.com/g/tinyapps-testers" target="_blank" rel="noopener"><span class="fit"><span data-t="saveBtn"></span></span></a></div>
-      <details><summary data-t="how"></summary><ol><li data-t="s1"></li><li data-t="s2"></li><li data-t="s3"></li><li data-t="s4"></li></ol></details>
-    </section>
+    <div id="apps"></div>
     <section class="card next">
       <p class="name"><span data-t="next"></span><span class="chip" data-t="locked"></span></p><p class="what" data-t="nextTxt"></p>
-      <div class="minis"><div class="mini" aria-label="?"><span class="q">📚</span><svg class="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="#8A98B2"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="#8A98B2" stroke-width="2.4"/></svg></div><div class="mini" aria-label="?"><span class="q">⛰️</span><svg class="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="#8A98B2"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="#8A98B2" stroke-width="2.4"/></svg></div><div class="mini" aria-label="?"><span class="q">🌙</span><svg class="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="#8A98B2"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="#8A98B2" stroke-width="2.4"/></svg></div></div>
+      <div class="minis" id="minis"></div>
     </section>
   </main>
   <footer>
     <div class="foot">
-      <a class="b3d mail" href="mailto:hellotinyapps@gmail.com"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22324F" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg><span data-t="contact"></span></a>
-      <div class="legal"><span class="t" data-t="legal"></span><a id="lpriv" data-t="privacy" target="_blank" rel="noopener"></a><a id="lterm" data-t="terms" target="_blank" rel="noopener"></a><a id="ldel" data-t="del" target="_blank" rel="noopener"></a></div>
-      <p class="made"><span data-t="made"></span><br>hellotinyapps@gmail.com</p>
+      <div class="frow">
+        <a class="b3d teal contact" href="mailto:hellotinyapps@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg><span data-t="contact"></span></a>
+        <a class="lk" id="lpriv" data-t="privacy" target="_blank" rel="noopener"></a>
+        <a class="lk" id="lterm" data-t="terms" target="_blank" rel="noopener"></a>
+      </div>
+      <p class="made"><span data-t="made"></span><span class="mail">hellotinyapps@gmail.com</span><span class="copy">© 2026 Tiny Apps</span></p>
     </div>
   </footer>
 </div>
 <script src="i18n.js"></script>
 <script>
 (function(){
-  // ── Configuración (cambiar aquí cuando haya novedades) ──
-  var PKG='com.tinyapps.tinyquit', GP='https://play.google.com/store/apps/details?id='+PKG;
-  var APPSTORE='';  // cuando Apple apruebe: 'https://apps.apple.com/app/id6837468388'
+  // ── CONFIGURACIÓN (lo único que se toca al haber novedades) ──
+  // Cada app = una línea. state: 'live' (con tiendas) o 'soon' (MUY PRONTO + botón para probarla). ios: '' mientras Apple no la apruebe.
+  var APPS=[
+    {id:'quit', a:'Tiny', b:'Quit', color:'#2E9BE6', icon:'tinyquit.jpg', state:'live', play:'https://play.google.com/store/apps/details?id=com.tinyapps.tinyquit', ios:''},  // al aprobar: 'https://apps.apple.com/app/id6837468388'
+    {id:'save', a:'Tiny', b:'Save', color:'#E0A800', icon:'tinysave.jpg', state:'soon', tester:'https://groups.google.com/g/tinyapps-testers'}
+  ];
+  var NEXT=['📚','⛰️','🌙'];   // pistas de las que vienen (se quita una cuando su app entra en APPS)
   var LEGAL='https://josepecina.github.io/tinyquit/';
-  var T=window.TA_I18N, codes=Object.keys(T);
-  var ua=navigator.userAgent||'', android=/Android/i.test(ua), ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  // ──
+  var T=window.TA_I18N, FL=window.TA_FLAGS, codes=Object.keys(T), cur;
+  var ua=navigator.userAgent||'', ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  function flag(c,w,h){return '<svg class="flag" viewBox="0 0 30 20" width="'+w+'" height="'+h+'" aria-hidden="true"><clipPath id="f'+c+w+'"><rect width="30" height="20" rx="5"/></clipPath><g clip-path="url(#f'+c+w+')">'+FL[c]+'</g></svg>';}
   function pick(){
     var q=(location.search.match(/[?&]lang=([a-z]{2})/)||[])[1]; if(q&&T[q]) return q;
     try{var s=localStorage.getItem('ta.lang'); if(s&&T[s]) return s;}catch(e){}
@@ -155,24 +169,36 @@ footer{margin-top:var(--gap);text-align:center;color:var(--muted)}
     for(var i=0;i<L.length;i++){var c=String(L[i]).slice(0,2).toLowerCase(); if(T[c]) return c;}
     return 'en';
   }
-  var gpI='<svg viewBox="0 0 24 24"><path fill="#34A853" d="M4 2.5l10.3 9.5L4 21.5c-.4-.2-.6-.6-.6-1.1V3.6c0-.5.2-.9.6-1.1z"/><path fill="#FBBC04" d="M19 9.5l2.4 1.4c.8.5.8 1.7 0 2.2L19 14.5 16.2 12z"/><path fill="#EA4335" d="M15.3 12.9l2.5 2.3-11 6.2z"/><path fill="#4285F4" d="M15.3 11.1L6.8 2.6l11 6.2z"/></svg>';
-  var apI='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.5 2-3.6a4.3 4.3 0 0 0-3.4-1.8c-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8a4.5 4.5 0 0 0-3.8 2.3c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3s1.6-.7 3-.7 1.8.7 3 .7 2-1.1 2.8-2.3a9.7 9.7 0 0 0 1.3-2.6 4 4 0 0 1-2.5-3.6zM14.1 5.5A4 4 0 0 0 15 2.6a4.1 4.1 0 0 0-2.7 1.4 3.8 3.8 0 0 0-1 2.8 3.4 3.4 0 0 0 2.8-1.3z"/></svg>';
-  function storeBtn(cls,href,icon,small,big,off){return '<a class="b3d store '+cls+(off?' off':'')+'" '+(off?'aria-disabled="true"':'href="'+href+'" target="_blank" rel="noopener"')+'>'+icon+'<span class="lb"><small class="fit"><span>'+small+'</span></small><span class="big fit"><span>'+big+'</span></span></span></a>';}
+  var gpI='<svg class="logo2" viewBox="0 0 24 24"><path fill="#00D7FE" d="M3.6 2.2c-.3.3-.4.8-.4 1.4v16.8c0 .6.1 1.1.4 1.4l.1.1 9.4-9.4v-.2L3.7 2.1z"/><path fill="#FFCE00" d="M16.2 15.6L13.1 12.4v-.2l3.1-3.1.1.1 3.7 2.1c1.1.6 1.1 1.6 0 2.2l-3.7 2.1z"/><path fill="#FF3A44" d="M16.3 15.5L13.1 12.3l-9.5 9.5c.4.4.9.4 1.6.1l11.1-6.4"/><path fill="#00F076" d="M16.3 9.1L5.2 2.7c-.7-.4-1.2-.3-1.6.1l9.5 9.5z"/></svg>';
+  var apI='<svg class="logo2" viewBox="0 0 24 24"><path fill="#fff" d="M16.4 12.6c0-2.4 2-3.5 2-3.6a4.3 4.3 0 0 0-3.4-1.8c-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8a4.5 4.5 0 0 0-3.8 2.3c-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3s1.6-.7 3-.7 1.8.7 3 .7 2-1.1 2.8-2.3a9.7 9.7 0 0 0 1.3-2.6 4 4 0 0 1-2.5-3.6zM14.1 5.5A4 4 0 0 0 15 2.6a4.1 4.1 0 0 0-2.7 1.4 3.8 3.8 0 0 0-1 2.8 3.4 3.4 0 0 0 2.8-1.3z"/></svg>';
+  function badge(href,icon,small,big,soon){return '<a class="badge'+(soon?' off':'')+'" '+(soon?'aria-disabled="true"':'href="'+href+'" target="_blank" rel="noopener"')+'>'+icon+'<span class="lb"><small class="fit"><span>'+small+'</span></small><span class="big fit"><span>'+big+'</span></span></span>'+(soon?'<span class="soon">'+soon+'</span>':'')+'</a>';}
+  function appCard(a,t){
+    var h='<section class="card"><div class="row"><img class="ico" src="'+a.icon+'" alt="'+a.a+a.b+'"><div class="txt"><p class="name"><span>'+a.a+'<b style="color:'+a.color+'">'+a.b+'</b></span>'+(a.state==='soon'?'<span class="chip">'+t.soon+'</span>':'')+'</p><p class="what">'+t[a.id]+'</p></div></div>';
+    if(a.state==='live'){var g=badge(a.play,gpI,t.gp,'Google Play'), s=badge(a.ios,apI,t.as,'App Store',a.ios?'':t.asSoon); h+='<div class="btns stores">'+(ios?s+g:g+s)+'</div>';}
+    else{h+='<div class="btns"><a class="b3d gold wide" href="'+a.tester+'" target="_blank" rel="noopener"><span class="fit"><span>'+t.saveBtn+'</span></span></a></div><details><summary>'+t.how+'</summary><ol><li>'+t.s1+'</li><li>'+t.s2+'</li><li>'+t.s3+'</li><li>'+t.s4+'</li></ol></details>';}
+    return h+'</section>';
+  }
   function render(c){
-    var t=T[c]; document.documentElement.lang=c; document.getElementById('langName').textContent=t.name;
+    cur=c; var t=T[c]; document.documentElement.lang=c;
+    document.getElementById('langName').textContent=t.name; document.getElementById('langflag').innerHTML=flag(c,27,18);
     document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=t[e.getAttribute('data-t')]||T.en[e.getAttribute('data-t')];});
-    var es=c==='es'; document.getElementById('lpriv').href=LEGAL+(es?'privacidad.html':'privacy.html'); document.getElementById('lterm').href=LEGAL+(es?'terminos.html':'terms.html'); document.getElementById('ldel').href=LEGAL+'borrar-cuenta.html';
-    var g=storeBtn('',GP,gpI,t.gp,'Google Play',false), a=storeBtn('dark',APPSTORE,apI,APPSTORE?t.as:t.asSoon,'App Store',!APPSTORE);
-    document.getElementById('stores').innerHTML = ios ? a+g : g+a;
+    var sfx=c==='es'?['privacidad','terminos']:c==='en'?['privacy','terms']:['privacy-'+c,'terms-'+c];
+    document.getElementById('lpriv').href=LEGAL+sfx[0]+'.html'; document.getElementById('lterm').href=LEGAL+sfx[1]+'.html';
+    document.getElementById('apps').innerHTML=APPS.map(function(a){return appCard(a,t);}).join('');
+    document.getElementById('minis').innerHTML=NEXT.map(function(e){return '<div class="mini"><span class="q">'+e+'</span><svg class="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3" fill="#8A98B2"/><path d="M8 10V8a4 4 0 0 1 8 0v2" fill="none" stroke="#8A98B2" stroke-width="2.4"/></svg></div>';}).join('');
+    document.getElementById('langmenu').innerHTML=codes.map(function(k){return '<button role="option" data-l="'+k+'"'+(k===c?' class="on" aria-selected="true"':'')+'>'+flag(k,27,18)+'<span>'+T[k].name+'</span></button>';}).join('');
     requestAnimationFrame(fitAll);
   }
-  // Textos de botón: si no caben, se reducen hasta el 80 %; si aun así no caben, se desplazan de lado a lado (GUIA-DISENO §0.2b)
+  // Textos de botón: si no caben, se reducen hasta el 80 %; si aun así no caben, se desplazan de lado a lado (GUIA-DISENO §0.15)
   function fitAll(){document.querySelectorAll('.fit').forEach(function(f){var s=f.firstElementChild; f.classList.remove('mq'); s.style.fontSize=''; var base=parseFloat(getComputedStyle(f).fontSize);
-    for(var k=1;k>=0.8&&f.scrollWidth>f.clientWidth+1;k-=0.05){s.style.fontSize=(base*k)+'px';}
-    if(f.scrollWidth>f.clientWidth+1){f.style.setProperty('--mq',(f.clientWidth-s.offsetWidth)+'px');f.classList.add('mq');f.setAttribute('data-fit','marquee');} else f.setAttribute('data-fit','ok');});}
-  var sel=document.getElementById('lang'); codes.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=T[c].name;sel.appendChild(o);});
-  var cur=pick(); sel.value=cur; render(cur);
-  sel.addEventListener('change',function(){try{localStorage.setItem('ta.lang',sel.value);}catch(e){} render(sel.value);});
+    var kmin=Math.max(0.8,11/base); for(var k=1;k>=kmin-1e-6&&f.scrollWidth>f.clientWidth;k-=0.05){s.style.fontSize=(base*k)+'px';}
+    if(f.scrollWidth>f.clientWidth){f.style.setProperty('--mq',(f.clientWidth-s.offsetWidth)+'px');f.classList.add('mq');f.setAttribute('data-fit','marquee');} else f.setAttribute('data-fit','ok');});}
+  var btn=document.getElementById('langbtn'), menu=document.getElementById('langmenu');
+  function openMenu(o){menu.classList.toggle('open',o);btn.setAttribute('aria-expanded',o?'true':'false');}
+  btn.addEventListener('click',function(e){e.stopPropagation();openMenu(!menu.classList.contains('open'));});
+  menu.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;try{localStorage.setItem('ta.lang',b.dataset.l);}catch(x){} render(b.dataset.l);openMenu(false);});
+  document.addEventListener('click',function(){openMenu(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape')openMenu(false);});
+  render(pick());
   window.addEventListener('resize',function(){requestAnimationFrame(fitAll);});
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitAll);
 })();
